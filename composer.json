@@ -1,0 +1,28 @@
+{
+    "name": "rmk/jsonapi",
+    "description": "Simple JSON API implementation",
+    "require": {
+        "rmk/collections": "^1.0",
+        "psr/container": "^2.0",
+        "php": "^7.4 || ^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rmk\\Jsonapi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RmkTests\\JsonApi\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kiril Savchev",
+            "email": "k.savchev@gmail.com"
+        }
+    ]
+}
