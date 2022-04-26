@@ -4,7 +4,8 @@
     "require": {
         "rmk/collections": "^1.0",
         "psr/container": "^2.0",
-        "php": "^7.4 || ^8.0"
+        "php": "^7.4 || ^8.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
