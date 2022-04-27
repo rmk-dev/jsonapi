@@ -2,7 +2,10 @@
 
 namespace Rmk\JsonApi\Contracts;
 
-interface DataInterface
+use Countable;
+use JsonSerializable;
+
+interface DataInterface extends Countable, JsonSerializable
 {
 
 }
