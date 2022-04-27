@@ -13,6 +13,8 @@ class Link implements JsonSerializable
 
     public const TYPE_SELF = 'self';
 
+    public const TYPE_RELATED = 'related';
+
     public const TYPE_ABOUT = 'about';
 
     /**
