@@ -23,42 +23,42 @@ class Document implements JsonSerializable
      *
      * @var JsonApi
      */
-    private JsonApi $jsonApi;
+    protected JsonApi $jsonApi;
 
     /**
      * The document’s “primary data”
      *
      * @var DataInterface
      */
-    private DataInterface $data;
+    protected DataInterface $data;
 
     /**
      * Error objects
      *
      * @var ErrorsCollection
      */
-    private ErrorsCollection $errors;
+    protected ErrorsCollection $errors;
 
     /**
      * A links object related to the primary data.
      *
      * @var LinksCollection
      */
-    private LinksCollection $links;
+    protected LinksCollection $links;
 
     /**
      * Resource objects that are related to the primary data and/or each other (“included resources”).
      *
      * @var ResourcesCollection
      */
-    private ResourcesCollection $included;
+    protected ResourcesCollection $included;
 
     /**
      * A meta-object that contains non-standard meta-information.
      *
      * @var stdClass|null
      */
-    private ?stdClass $meta;
+    protected ?stdClass $meta;
 
     /**
      * @param DataInterface $data
@@ -74,26 +74,10 @@ class Document implements JsonSerializable
         ResourcesCollection $included = null,
         ?stdClass $meta = null
     ) {
-        if ($data instanceof ErrorsCollection) {
-            $this->errors = $data;
-        } else {
-            $this->data = $data;
-        }
-        if ($jsonApi) {
-            $this->jsonApi = $jsonApi;
-        } else {
-            $this->jsonApi = new JsonApi(JsonApi::VERSION_DEFAULT);
-        }
-        if ($links) {
-            $this->links = $links;
-        } else {
-            $this->links = new LinksCollection();
-        }
-        if ($included) {
-            $this->included = $included;
-        } else {
-            $this->included = new ResourcesCollection();
-        }
+        $this->initData($data);
+        $this->initJsonApi($jsonApi);
+        $this->initLinks($links);
+        $this->initIncludes($included);
         $this->meta = $meta;
     }
 
@@ -166,5 +150,49 @@ class Document implements JsonSerializable
         }
 
         return $json;
+    }
+
+    /**
+     * @param DataInterface $data
+     *
+     * @return void
+     */
+    protected function initData(DataInterface $data): void
+    {
+        if ($data instanceof ErrorsCollection) {
+            $this->errors = $data;
+        } else {
+            $this->data = $data;
+        }
+    }
+
+    /**
+     * @param LinksCollection|null $links
+     *
+     * @return void
+     */
+    protected function initLinks(?LinksCollection $links): void
+    {
+        $this->links = $links ?? new LinksCollection();
+    }
+
+    /**
+     * @param ResourcesCollection|null $included
+     *
+     * @return void
+     */
+    protected function initIncludes(?ResourcesCollection $included): void
+    {
+        $this->included = $included ?? new ResourcesCollection();
+    }
+
+    /**
+     * @param JsonApi|null $jsonApi
+     *
+     * @return void
+     */
+    protected function initJsonApi(?JsonApi $jsonApi): void
+    {
+        $this->jsonApi = $jsonApi ?? new JsonApi(JsonApi::VERSION_DEFAULT);
     }
 }
