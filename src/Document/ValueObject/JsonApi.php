@@ -11,6 +11,10 @@ use stdClass;
 class JsonApi implements JsonSerializable
 {
 
+    public const VERSION_1_0 = '1.0';
+
+    public const VERSION_DEFAULT = '1.0';
+
     /**
      * JSON API version string
      *

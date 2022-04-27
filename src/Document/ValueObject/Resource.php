@@ -2,6 +2,8 @@
 
 namespace Rmk\JsonApi\Document\ValueObject;
 
+use Rmk\JsonApi\Document\Collection\LinksCollection;
+use Rmk\JsonApi\Document\Collection\RelationshipsCollection;
 use stdClass;
 
 /**
@@ -40,17 +42,22 @@ class Resource extends ResourceIdentifier
     private ?stdClass $meta;
 
     /**
+     * @param string $id
+     * @param string $type
      * @param stdClass|null $attributes
      * @param RelationshipsCollection|null $relationships
      * @param LinksCollection|null $links
      * @param stdClass|null $meta
      */
     public function __construct(
+        string $id,
+        string $type,
         ?stdClass $attributes = null,
         RelationshipsCollection $relationships = null,
         LinksCollection $links = null,
         ?stdClass $meta = null
     ) {
+        parent::__construct($id, $type);
         $this->attributes = $attributes;
         if ($relationships) {
             $this->relationships = $relationships;

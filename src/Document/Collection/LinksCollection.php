@@ -1,8 +1,9 @@
 <?php
 
-namespace Rmk\JsonApi\Document\ValueObject;
+namespace Rmk\JsonApi\Document\Collection;
 
 use Rmk\Collections\AbstractClassCollection;
+use Rmk\JsonApi\Document\ValueObject\Link;
 
 /**
  * Collection with links
