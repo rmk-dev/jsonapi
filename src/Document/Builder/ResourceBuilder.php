@@ -2,7 +2,6 @@
 
 namespace Rmk\JsonApi\Document\Builder;
 
-// TODO buildResource(), buildIdentifier()
 use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\Collection\RelationshipsCollection;
 use Rmk\JsonApi\Document\ValueObject\Link;
