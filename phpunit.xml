@@ -8,8 +8,12 @@
 >
     <coverage>
         <include>
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">src/Document/ValueObject</directory>
+            <directory suffix=".php">src/Document/Collection</directory>
+        </exclude>
         <report>
             <text outputFile="php://stdout"/>
         </report>
