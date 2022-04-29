@@ -5,6 +5,7 @@ namespace RmkTests\JsonApi;
 use PHPUnit\Framework\TestCase;
 use Rmk\JsonApi\Document\Builder\LinkBuilder;
 use Rmk\JsonApi\Document\ValueObject\Link;
+use Rmk\JsonApi\Exception\InvalidPlainObjectException;
 use stdClass;
 
 class LinkBuilderTest extends TestCase
@@ -45,5 +46,12 @@ class LinkBuilderTest extends TestCase
         $link = LinkBuilder::fromPlainObject($plain)->build();
         $this->assertEquals($plain->href, $link->getHref());
         $this->assertSame($plain->meta, $link->getMeta());
+    }
+
+    public function testFailBuildFromPlainWithInvalidObject(): void
+    {
+        $this->expectException(InvalidPlainObjectException::class);
+        $this->expectExceptionMessage('Link must be either a stdClass instance or string');
+        LinkBuilder::fromPlainObject(123);
     }
 }
