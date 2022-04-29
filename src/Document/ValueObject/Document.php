@@ -3,7 +3,7 @@
 namespace Rmk\JsonApi\Document\ValueObject;
 
 use JsonSerializable;
-use Rmk\JsonApi\Contracts\DataInterface;
+use Rmk\JsonApi\Contracts\DocumentData;
 use Rmk\JsonApi\Document\Collection\ErrorsCollection;
 use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
@@ -28,9 +28,9 @@ class Document implements JsonSerializable
     /**
      * The document’s “primary data”
      *
-     * @var DataInterface
+     * @var DocumentData
      */
-    protected DataInterface $data;
+    protected DocumentData $data;
 
     /**
      * Error objects
@@ -61,18 +61,18 @@ class Document implements JsonSerializable
     protected ?stdClass $meta;
 
     /**
-     * @param DataInterface $data
+     * @param DocumentData $data
      * @param LinksCollection|null $links
      * @param JsonApi|null $jsonApi
      * @param ResourcesCollection|null $included
      * @param stdClass|null $meta
      */
     public function __construct(
-        DataInterface $data,
-        LinksCollection $links = null,
-        JsonApi $jsonApi = null,
+        DocumentData        $data,
+        LinksCollection     $links = null,
+        JsonApi             $jsonApi = null,
         ResourcesCollection $included = null,
-        ?stdClass $meta = null
+        ?stdClass           $meta = null
     ) {
         $this->initData($data);
         $this->initJsonApi($jsonApi);
@@ -90,9 +90,9 @@ class Document implements JsonSerializable
     }
 
     /**
-     * @return DataInterface
+     * @return DocumentData
      */
-    public function getData(): DataInterface
+    public function getData(): DocumentData
     {
         return $this->data;
     }
@@ -153,11 +153,11 @@ class Document implements JsonSerializable
     }
 
     /**
-     * @param DataInterface $data
+     * @param DocumentData $data
      *
      * @return void
      */
-    protected function initData(DataInterface $data): void
+    protected function initData(DocumentData $data): void
     {
         if ($data instanceof ErrorsCollection) {
             $this->errors = $data;

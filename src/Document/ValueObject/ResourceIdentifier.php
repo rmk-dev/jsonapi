@@ -3,7 +3,7 @@
 namespace Rmk\JsonApi\Document\ValueObject;
 
 use JsonSerializable;
-use Rmk\JsonApi\Contracts\DataInterface;
+use Rmk\JsonApi\Contracts\DocumentData;
 
 /**
  * Resource identification presentation
@@ -14,7 +14,7 @@ use Rmk\JsonApi\Contracts\DataInterface;
  * (The set of URIs controlled by a server, or multiple servers acting as one, constitute an API.)
  * The type member is used to describe resource objects that share common attributes and relationships.
  */
-class ResourceIdentifier implements JsonSerializable, DataInterface
+class ResourceIdentifier implements JsonSerializable, DocumentData
 {
 
     /**
