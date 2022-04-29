@@ -3,11 +3,13 @@
 namespace Rmk\JsonApi\Document\Builder;
 
 use Rmk\JsonApi\Contracts\DocumentData;
+use Rmk\JsonApi\Document\Collection\ErrorsCollection;
 use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
 use Rmk\JsonApi\Document\ValueObject\Document;
 use Rmk\JsonApi\Document\ValueObject\JsonApi;
 use Rmk\JsonApi\Document\ValueObject\Resource;
+use Rmk\JsonApi\Exception\InvalidPlainObjectException;
 use stdClass;
 
 class DocumentBuilder
@@ -164,6 +166,11 @@ class DocumentBuilder
 
     public static function fromPlainObject(stdClass $object): self
     {
+        if (empty($object->data) && empty($object->errors) && empty($object->meta)) {
+            throw new InvalidPlainObjectException(
+                'A document MUST contain at least one of the "data", "errors" or "meta" top-level members'
+            );
+        }
         $builder = static::instance();
         if (!empty($object->jsonapi) && isset($object->jsonapi->version)) {
             $builder->withJsonApi(new JsonApi($object->jsonapi->version));
@@ -182,8 +189,12 @@ class DocumentBuilder
                 $data = ResourceBuilder::fromPlainObject($object->data)->buildResource();
             }
             $builder->withData($data);
-        } else if (!empty($object->errors)) {
-            // error builder...
+        } else if (!empty($object->errors) && is_array($object->errors)) {
+            $errors = new ErrorsCollection();
+            foreach ($object->errors as $error) {
+                $errors->append(ErrorBuilder::fromPlainObject($error));
+            }
+            $builder->withData($errors);
         }
         return $builder;
     }
