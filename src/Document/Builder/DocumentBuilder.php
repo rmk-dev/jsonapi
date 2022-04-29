@@ -7,6 +7,7 @@ use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
 use Rmk\JsonApi\Document\ValueObject\Document;
 use Rmk\JsonApi\Document\ValueObject\JsonApi;
+use Rmk\JsonApi\Document\ValueObject\Resource;
 use stdClass;
 
 class DocumentBuilder
@@ -161,11 +162,28 @@ class DocumentBuilder
         return $builder;
     }
 
-    public static function fromDecodedJsonObject(stdClass $object): self
+    public static function fromPlainObject(stdClass $object): self
     {
         $builder = static::instance();
-        if (!empty($object->data)) {
+        if (!empty($object->jsonapi) && isset($object->jsonapi->version)) {
+            $builder->withJsonApi(new JsonApi($object->jsonapi->version));
+        }
+        if (!empty($object->meta)) {
+            $builder->withMeta($object->meta);
+        }
 
+        if (!empty($object->data)) {
+            if (is_array($object->data)) {
+                $data = new ResourcesCollection();
+                foreach ($object->data as $res) {
+                    $data->append(ResourceBuilder::fromPlainObject($res)->buildResource());
+                }
+            } else {
+                $data = ResourceBuilder::fromPlainObject($object->data)->buildResource();
+            }
+            $builder->withData($data);
+        } else if (!empty($object->errors)) {
+            // error builder...
         }
         return $builder;
     }

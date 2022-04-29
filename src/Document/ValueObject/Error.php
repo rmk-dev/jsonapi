@@ -52,9 +52,9 @@ class Error implements JsonSerializable
      * A links object containing "about" member -
      * a link that leads to further details about this particular occurrence of the problem.
      *
-     * @var Link
+     * @var Link|null
      */
-    private Link $link;
+    private ?Link $link;
 
     /**
      * An object containing references to the source of the error
@@ -95,11 +95,7 @@ class Error implements JsonSerializable
         $this->code = $code;
         $this->title = $title;
         $this->detail = $detail;
-        if ($link) {
-            $this->link = $link;
-        } else {
-            $this->link = new Link('');
-        }
+        $this->link = $link;
         $this->source = $source;
         $this->meta = $meta;
     }
