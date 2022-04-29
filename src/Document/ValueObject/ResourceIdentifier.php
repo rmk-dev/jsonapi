@@ -17,6 +17,10 @@ use Rmk\JsonApi\Contracts\DocumentData;
 class ResourceIdentifier implements JsonSerializable, DocumentData
 {
 
+    public const EMPTY_ID = '__empty_resource_identification__';
+
+    public const EMPTY_TYPE = '__empty_resource_type__';
+
     /**
      * Resource identifier string
      *

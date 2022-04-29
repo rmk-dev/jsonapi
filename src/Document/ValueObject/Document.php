@@ -161,8 +161,10 @@ class Document implements JsonSerializable
     {
         if ($data instanceof ErrorsCollection) {
             $this->errors = $data;
+            $this->data = new ResourceIdentifier(ResourceIdentifier::EMPTY_ID, ResourceIdentifier::EMPTY_TYPE);
         } else {
             $this->data = $data;
+            $this->errors = new ErrorsCollection();
         }
     }
 

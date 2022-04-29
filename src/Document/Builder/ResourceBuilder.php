@@ -8,6 +8,7 @@ use Rmk\JsonApi\Document\ValueObject\Link;
 use Rmk\JsonApi\Document\ValueObject\Relationship;
 use Rmk\JsonApi\Document\ValueObject\Resource;
 use Rmk\JsonApi\Document\ValueObject\ResourceIdentifier;
+use Rmk\JsonApi\Exception\InvalidResourceException;
 use stdClass;
 
 /**
@@ -202,5 +203,65 @@ class ResourceBuilder
         $builder->meta = $resource->getMeta();
 
         return $builder;
+    }
+
+    /**
+     * @param stdClass $object
+     *
+     * @return static
+     */
+    public static function fromPlainObject(stdClass $object): self
+    {
+        if (empty($object->type)) {
+            throw new InvalidResourceException('No resource type is given');
+        }
+        if (!isset($object->id)) {
+            $object->id = ResourceIdentifier::EMPTY_ID;
+        }
+        $builder = self::instance()
+            ->withId($object->id)
+            ->withType($object->type);
+        if (isset($object->attributes)) {
+            $builder->withAttributes($object->attributes);
+        }
+        static::buildRelationships($builder, $object);
+        static::buildLinks($builder, $object);
+
+        return $builder;
+    }
+
+    /**
+     * Build relationships collection from the plain object and set it to the builder
+     *
+     * @param ResourceBuilder $builder
+     * @param stdClass $object
+     *
+     * @return void
+     */
+    protected static function buildRelationships(ResourceBuilder $builder, stdClass $object): void
+    {
+        if (isset($object->relationships)) {
+            foreach ($object->relationships as $name => $relationship) {
+                $relationship = RelationshipBuilder::fromPlainObject($relationship)->build();
+                $builder->withRelation($relationship, $name);
+            }
+        }
+    }
+
+    /**
+     * Build links collection and set it to the builder
+     *
+     * @param ResourceBuilder $builder
+     * @param stdClass $object
+     *
+     * @return void
+     */
+    protected static function buildLinks(ResourceBuilder $builder, stdClass $object): void
+    {
+        if (isset($object->links)) {
+            foreach ($object->links as $name => $link) {
+                $builder->withLink(LinkBuilder::fromPlainObject($link)->build(), $name);
+            }
+        }
     }
 }

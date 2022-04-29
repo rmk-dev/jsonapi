@@ -3,6 +3,7 @@
 namespace Rmk\JsonApi\Document\ValueObject;
 
 use JsonSerializable;
+use Rmk\JsonApi\Contracts\DocumentData;
 use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
 use stdClass;
@@ -23,9 +24,9 @@ class Relationship implements JsonSerializable
     private LinksCollection $links;
 
     /**
-     * @var ResourcesCollection
+     * @var DocumentData
      */
-    private ResourcesCollection $data;
+    private DocumentData $data;
 
     /**
      * @var stdClass|null
@@ -33,11 +34,11 @@ class Relationship implements JsonSerializable
     private ?stdClass $meta;
 
     /**
-     * @param LinksCollection|null $links
      * @param ResourcesCollection|null $data
+     * @param LinksCollection|null $links
      * @param stdClass|null $meta
      */
-    public function __construct(LinksCollection $links = null, ResourcesCollection $data = null, ?stdClass $meta = null)
+    public function __construct(DocumentData $data = null, LinksCollection $links = null, ?stdClass $meta = null)
     {
         $this->links = $links ?? new LinksCollection();
         $this->data = $data ?? new ResourcesCollection();
@@ -53,9 +54,9 @@ class Relationship implements JsonSerializable
     }
 
     /**
-     * @return ResourcesCollection
+     * @return DocumentData
      */
-    public function getData(): ResourcesCollection
+    public function getData(): DocumentData
     {
         return $this->data;
     }

@@ -23,7 +23,7 @@ class LinkBuilderTest extends TestCase
         $this->assertSame($meta, $link->getMeta());
     }
 
-    public function testBuldFromLink(): void
+    public function testBuildFromLink(): void
     {
         $meta = new stdClass();
         $meta->author = 'Test Author';
@@ -34,5 +34,16 @@ class LinkBuilderTest extends TestCase
 
         $this->assertNotEquals($protoLink->getHref(), $link->getHref());
         $this->assertSame($meta, $link->getMeta());
+    }
+
+    public function testBuildFromPlainObject(): void
+    {
+        $plain = new stdClass();
+        $plain->href = 'https://example.com';
+        $plain->meta = new stdClass();
+        $plain->meta->author = 'Test Author';
+        $link = LinkBuilder::fromPlainObject($plain)->build();
+        $this->assertEquals($plain->href, $link->getHref());
+        $this->assertSame($plain->meta, $link->getMeta());
     }
 }

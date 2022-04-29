@@ -137,4 +137,36 @@ class DocumentBuilder
     {
         return new self();
     }
+
+    /**
+     * Creates new builder with data, copied by a prototype document
+     *
+     * @param Document $prototype
+     *
+     * @return static
+     */
+    public static function fromDocument(Document $prototype): self
+    {
+        $builder = static::instance()
+            ->withLinks($prototype->getLinks())
+            ->withIncluded($prototype->getIncluded())
+            ->withMeta($prototype->getMeta())
+            ->withJsonApi($prototype->getJsonApi());
+
+        if ($prototype->getErrors()->count()) {
+            $builder->withData($prototype->getErrors());
+        } else {
+            $builder->withData($prototype->getData());
+        }
+        return $builder;
+    }
+
+    public static function fromDecodedJsonObject(stdClass $object): self
+    {
+        $builder = static::instance();
+        if (!empty($object->data)) {
+
+        }
+        return $builder;
+    }
 }

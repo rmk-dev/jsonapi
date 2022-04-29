@@ -10,6 +10,8 @@ use Rmk\JsonApi\Document\ValueObject\Link;
 use Rmk\JsonApi\Document\ValueObject\Relationship;
 use Rmk\JsonApi\Document\ValueObject\Resource;
 use Rmk\JsonApi\Document\ValueObject\ResourceIdentifier;
+use Rmk\JsonApi\Exception\InvalidResourceException;
+use stdClass;
 
 class ResourceBuilderTest extends TestCase
 {
@@ -40,8 +42,8 @@ class ResourceBuilderTest extends TestCase
 
     public function testBuildResource(): void
     {
-        $attributes = new \stdClass();
-        $meta = new \stdClass();
+        $attributes = new stdClass();
+        $meta = new stdClass();
         $meta->author = 'Test User';
         $links = new LinksCollection();
         $additionalLink = new Link('https://example.com');
@@ -75,5 +77,42 @@ class ResourceBuilderTest extends TestCase
         $this->assertNotSame($proto, $resource);
         $this->assertEquals($proto->getId(), $resource->getId());
         $this->assertEquals($proto->getType(), $resource->getType());
+    }
+
+    public function testBuildFromPlainObject(): void
+    {
+        $object = new stdClass();
+        $object->id = '123';
+        $object->type = 'test-type';
+        $object->attributes = new stdClass();
+        $object->attributes->prop1 = 'value1';
+        $object->attributes->prop2 = 'value2';
+        $object->relationships = new stdClass();
+        $object->relationships->author = new stdClass();
+        $object->relationships->author->links = new stdClass();
+        $object->relationships->author->links->self = "/articles/1/relationships/author";
+        $object->relationships->author->links->related = "/articles/1/author";
+        $object->links = new stdClass();
+        $object->links->self = "https://example.com/articles/1";
+        $resource = ResourceBuilder::fromPlainObject($object)->buildResource();
+        $this->assertEquals($object->id, $resource->getId());
+        $this->assertEquals($object->type, $resource->getType());
+        $this->assertSame($object->attributes, $resource->getAttributes());
+        $this->assertEquals(1, $resource->getRelationships()->count());
+    }
+
+    public function testBuildFromPlainObjectWithDefaultId(): void
+    {
+        $object = new stdClass();
+        $object->type = 'test-type';
+        $resource = ResourceBuilder::fromPlainObject($object)->buildResource();
+        $this->assertEquals(ResourceIdentifier::EMPTY_ID, $resource->getId());
+    }
+
+    public function testFailBuildFromPlainObjectWithException(): void
+    {
+        $this->expectException(InvalidResourceException::class);
+        $this->expectExceptionMessage('No resource type is given');
+        ResourceBuilder::fromPlainObject(new stdClass());
     }
 }

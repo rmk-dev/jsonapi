@@ -3,6 +3,7 @@
 namespace Rmk\JsonApi\Document\Builder;
 
 use Rmk\JsonApi\Document\ValueObject\Link;
+use Rmk\JsonApi\Exception\InvalidPlainObjectException;
 use stdClass;
 
 /**
@@ -47,9 +48,28 @@ class LinkBuilder
 
     public static function fromLink(Link $link): self
     {
-        $builder = new self();
-        $builder->href = $link->getHref();
-        $builder->meta = $link->getMeta();
+        return static::instance()
+            ->withMeta($link->getMeta())
+            ->withHref($link->getHref());
+    }
+
+    public static function fromPlainObject($object): self
+    {
+        if (is_string($object)) {
+            $link = $object;
+            $object = new stdClass();
+            $object->href = $link;
+        }
+        if (!($object instanceof stdClass)) {
+             throw new InvalidPlainObjectException('Link must be either a stdClass instance or string');
+        }
+        $builder = static::instance();
+        if (!empty($object->meta)) {
+            $builder->withMeta($object->meta);
+        }
+        if (!empty($object->href)) {
+            $builder->withHref($object->href);
+        }
 
         return $builder;
     }
