@@ -67,4 +67,9 @@ class ResourceIdentifier implements JsonSerializable, DataInterface
             'type' => $this->getType(),
         ];
     }
+
+    public function count()
+    {
+        return 1;
+    }
 }
