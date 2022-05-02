@@ -2,6 +2,7 @@
 
 namespace Rmk\JsonApi\Document\Builder;
 
+use Rmk\JsonApi\Contracts\ValueObjectBuilder;
 use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\Collection\RelationshipsCollection;
 use Rmk\JsonApi\Document\ValueObject\Link;
@@ -14,7 +15,7 @@ use stdClass;
 /**
  * Build resources
  */
-class ResourceBuilder
+class ResourceBuilder implements ValueObjectBuilder
 {
 
     /**
@@ -162,7 +163,7 @@ class ResourceBuilder
     /**
      * @return Resource
      */
-    public function buildResource(): Resource
+    public function build(): Resource
     {
         return new Resource($this->id, $this->type, $this->attributes, $this->relations, $this->links, $this->meta);
     }

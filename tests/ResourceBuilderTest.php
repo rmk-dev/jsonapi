@@ -58,7 +58,7 @@ class ResourceBuilderTest extends TestCase
             ->withRelations($rels)
             ->withLink($additionalLink, Link::TYPE_ABOUT)
             ->withRelation($additionalRel, 'test-rel')
-            ->buildResource();
+            ->build();
 
         $this->assertEquals('123', $resource->getId());
         $this->assertEquals('test-type', $resource->getType());
@@ -73,7 +73,7 @@ class ResourceBuilderTest extends TestCase
     public function testBuildFromResource(): void
     {
         $proto = new Resource('123', 'test-type');
-        $resource = ResourceBuilder::fromResource($proto)->buildResource();
+        $resource = ResourceBuilder::fromResource($proto)->build();
         $this->assertNotSame($proto, $resource);
         $this->assertEquals($proto->getId(), $resource->getId());
         $this->assertEquals($proto->getType(), $resource->getType());
@@ -94,7 +94,7 @@ class ResourceBuilderTest extends TestCase
         $object->relationships->author->links->related = "/articles/1/author";
         $object->links = new stdClass();
         $object->links->self = "https://example.com/articles/1";
-        $resource = ResourceBuilder::fromPlainObject($object)->buildResource();
+        $resource = ResourceBuilder::fromPlainObject($object)->build();
         $this->assertEquals($object->id, $resource->getId());
         $this->assertEquals($object->type, $resource->getType());
         $this->assertSame($object->attributes, $resource->getAttributes());
@@ -105,7 +105,7 @@ class ResourceBuilderTest extends TestCase
     {
         $object = new stdClass();
         $object->type = 'test-type';
-        $resource = ResourceBuilder::fromPlainObject($object)->buildResource();
+        $resource = ResourceBuilder::fromPlainObject($object)->build();
         $this->assertEquals(ResourceIdentifier::EMPTY_ID, $resource->getId());
     }
 

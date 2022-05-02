@@ -3,6 +3,7 @@
 namespace Rmk\JsonApi\Document\Builder;
 
 use Rmk\JsonApi\Contracts\DocumentData;
+use Rmk\JsonApi\Contracts\ValueObjectBuilder;
 use Rmk\JsonApi\Document\Collection\ErrorsCollection;
 use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
@@ -12,7 +13,10 @@ use Rmk\JsonApi\Document\ValueObject\Resource;
 use Rmk\JsonApi\Exception\InvalidPlainObjectException;
 use stdClass;
 
-class DocumentBuilder
+/**
+ * Builds document (top-level) value object
+ */
+class DocumentBuilder implements ValueObjectBuilder
 {
 
     /**
@@ -183,10 +187,10 @@ class DocumentBuilder
             if (is_array($object->data)) {
                 $data = new ResourcesCollection();
                 foreach ($object->data as $res) {
-                    $data->append(ResourceBuilder::fromPlainObject($res)->buildResource());
+                    $data->append(ResourceBuilder::fromPlainObject($res)->build());
                 }
             } else {
-                $data = ResourceBuilder::fromPlainObject($object->data)->buildResource();
+                $data = ResourceBuilder::fromPlainObject($object->data)->build();
             }
             $builder->withData($data);
         } else if (!empty($object->errors) && is_array($object->errors)) {

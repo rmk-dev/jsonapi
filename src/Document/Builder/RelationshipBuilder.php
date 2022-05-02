@@ -3,11 +3,15 @@
 namespace Rmk\JsonApi\Document\Builder;
 
 use Rmk\JsonApi\Contracts\DocumentData;
+use Rmk\JsonApi\Contracts\ValueObjectBuilder;
 use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\ValueObject\Relationship;
 use stdClass;
 
-class RelationshipBuilder
+/**
+ * Builds relationship value objects
+ */
+class RelationshipBuilder implements ValueObjectBuilder
 {
 
     /**
@@ -91,7 +95,7 @@ class RelationshipBuilder
         $builder = static::instance();
         if (isset($object->data)) {
             $resourceBuilder = ResourceBuilder::fromPlainObject($object->data);
-            $builder->withData($resourceBuilder->buildResource());
+            $builder->withData($resourceBuilder->build());
         }
         if (isset($object->meta)) {
             $builder->withMeta($object->meta);

@@ -2,12 +2,16 @@
 
 namespace Rmk\JsonApi\Document\Builder;
 
+use Rmk\JsonApi\Contracts\ValueObjectBuilder;
 use Rmk\JsonApi\Document\ValueObject\Error;
 use Rmk\JsonApi\Document\ValueObject\ErrorSource;
 use Rmk\JsonApi\Document\ValueObject\Link;
 use stdClass;
 
-class ErrorBuilder
+/**
+ * Builds error objects
+ */
+class ErrorBuilder implements ValueObjectBuilder
 {
 
     /**
