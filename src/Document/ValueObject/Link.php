@@ -17,6 +17,14 @@ class Link implements JsonSerializable
 
     public const TYPE_ABOUT = 'about';
 
+    public const PAGINATION_FIRST = 'first';
+
+    public const PAGINATION_LAST = 'last';
+
+    public const PAGINATION_PREV = 'prev';
+
+    public const PAGINATION_NEXT = 'next';
+
     /**
      * A string containing the link’s URL.
      *
