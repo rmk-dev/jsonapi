@@ -4,6 +4,7 @@ namespace Rmk\JsonApi\Document\ValueObject;
 
 use JsonSerializable;
 use Rmk\JsonApi\Contracts\DocumentData;
+use Rmk\JsonApi\Contracts\Relationship as RelationshipContract;
 use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
 use stdClass;
@@ -15,7 +16,7 @@ use stdClass;
  * (“relationships”) represent references from the resource object in which it’s defined to other resource objects.
  * Relationships may be to-one or to-many.
  */
-class Relationship implements JsonSerializable
+class Relationship implements JsonSerializable, RelationshipContract
 {
 
     /**
@@ -32,6 +33,13 @@ class Relationship implements JsonSerializable
      * @var stdClass|null
      */
     private ?stdClass $meta;
+
+    /**
+     * The relationship name
+     *
+     * @var string
+     */
+    protected string $name;
 
     /**
      * @param ResourcesCollection|null $data
@@ -67,6 +75,25 @@ class Relationship implements JsonSerializable
     public function getMeta(): ?stdClass
     {
         return $this->meta;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
     }
 
     public function jsonSerialize()
