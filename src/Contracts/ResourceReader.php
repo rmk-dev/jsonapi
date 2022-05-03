@@ -4,6 +4,8 @@ namespace Rmk\JsonApi\Contracts;
 
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
 use Rmk\JsonApi\Document\ValueObject\Resource;
+use Rmk\JsonApi\Dto\FetchRequirements;
+use Rmk\JsonApi\Dto\PaginationRequirements;
 use Rmk\JsonApi\Exception\RelationshipDoesNotExistsException;
 use Rmk\JsonApi\Exception\ResourceNotFoundException;
 
@@ -12,16 +14,6 @@ use Rmk\JsonApi\Exception\ResourceNotFoundException;
  */
 interface ResourceReader
 {
-
-    /**
-     * Default items per page for the collections. Zero means all items.
-     */
-    public const DEFAULT_PER_PAGE = 0;
-
-    /**
-     * Default page of the collection. Zero means no pagination.
-     */
-    public const DEFAULT_PAGE = 0;
 
     /**
      * Loads single resource by its identification
@@ -44,18 +36,14 @@ interface ResourceReader
      * it should contain links about the pagination like "first", "last", "next", "prev".
      * Empty collection must be return if no data is loaded.
      *
-     * @param int      $perPage The number of resource per page. Default 0 means loading of all resources
-     * @param int      $page    The number of the current page. Default 0 means loading of all resources
-     * @param iterable $filters Filters for loading collection. Default none.
-     * @param iterable $fields  Fields to be loaded. Default empty array means loading of all fields
+     * @param FetchRequirements $fetchRequirements           Requirements for fetching data (fields, filters, sorting)
+     * @param PaginationRequirements $paginationRequirements Requirements for paginating (items per page, current page)
      *
      * @return ResourcesCollection Collection with resource objects and pagination links
      */
     public function readCollection(
-        int $perPage = self::DEFAULT_PER_PAGE,
-        int $page = self::DEFAULT_PAGE,
-        iterable $filters = [],
-        iterable $fields = []
+        FetchRequirements $fetchRequirements,
+        PaginationRequirements $paginationRequirements
     ): ResourcesCollection;
 
     /**
@@ -65,10 +53,10 @@ interface ResourceReader
      * found it must throw ResourceNotFoundException. If the resource does not have a relationship with such name it
      * must throw RelationshipDoesNotExistsException.
      *
-     * @param string $id   The main resource identification
-     * @param string $name The name of the relationship
-     * @param int $perPage The number of resource per page if the relationship is collection. Default all items.
-     * @param int $page    The current page if the relationship is collection. Default 0 means no pagination.
+     * @param string                 $id                     The main resource identification
+     * @param string                 $name                   The name of the relationship
+     * @param FetchRequirements      $fetchRequirements      Requirements for fetching data (fields, filters, sorting)
+     * @param PaginationRequirements $paginationRequirements Requirements for paginating (items per page, current page)
      *
      * @return Relationship
      *
@@ -78,7 +66,7 @@ interface ResourceReader
     public function readRelation(
         string $id,
         string $name,
-        int $perPage = self::DEFAULT_PER_PAGE,
-        int $page = self::DEFAULT_PAGE
+        FetchRequirements $fetchRequirements,
+        PaginationRequirements $paginationRequirements
     ): Relationship;
 }
