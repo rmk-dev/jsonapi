@@ -14,6 +14,7 @@
             <directory suffix=".php">src/Document/ValueObject</directory>
             <directory suffix=".php">src/Document/Collection</directory>
             <directory suffix=".php">src/Exception</directory>
+            <directory suffix=".php">src/Dto</directory>
         </exclude>
         <report>
             <text outputFile="php://stdout"/>

@@ -7,6 +7,8 @@ use Rmk\JsonApi\Contracts\Relationship;
 use Rmk\JsonApi\Contracts\ResourceReader;
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
 use Rmk\JsonApi\Document\ValueObject\Resource;
+use Rmk\JsonApi\Dto\QueryParameters;
+use Rmk\JsonApi\Dto\PaginationParameters;
 use Rmk\JsonApi\Exception\RelationshipDoesNotExistsException;
 use Rmk\JsonApi\Exception\ResourceNotFoundException;
 
@@ -34,27 +36,53 @@ class FetchData
     }
 
     /**
-     * @param string $type
-     * @param string $id
-     * @param string $relation
      *
-     * @return Relationship|ResourcesCollection|Resource
+     * @param QueryParameters      $fetchRequirements
+     * @param PaginationParameters $paginationRequirements
+     *
+     * @return Relationship|Resource|ResourcesCollection
      *
      * @throws RelationshipDoesNotExistsException
      * @throws ResourceNotFoundException
      */
-    public function execute(string $type, string $id = '', string $relation = '')
+    public function execute(QueryParameters $fetchRequirements, PaginationParameters $paginationRequirements)
     {
+        $id = $fetchRequirements->getId();
+        $type = $fetchRequirements->getType();
         /** @var ResourceReader $reader */
         $reader = $this->readers->get($type);
         if ($id) {
-            if ($relation) {
-                return $reader->readRelation($id, $relation);
-            } else {
-                return $reader->read($id);
-            }
+            $data = $this->fetchSingle($reader, $fetchRequirements, $paginationRequirements);
         } else {
-            return $reader->readCollection($type);
+            $data = $reader->readCollection($fetchRequirements, $paginationRequirements);
         }
+
+        return $data;
+    }
+
+    /**
+     * @param ResourceReader $reader
+     * @param QueryParameters $fetchRequirements
+     * @param PaginationParameters $paginationRequirements
+     *
+     * @return Relationship|Resource
+     *
+     * @throws RelationshipDoesNotExistsException
+     * @throws ResourceNotFoundException
+     */
+    protected function fetchSingle(
+        ResourceReader $reader,
+        QueryParameters $fetchRequirements,
+        PaginationParameters $paginationRequirements
+    ) {
+        $id = $fetchRequirements->getId();
+        $relationName = $fetchRequirements->getRelationName();
+        if ($relationName) {
+            $data = $reader->readRelation($id, $relationName, $fetchRequirements, $paginationRequirements);
+        } else {
+            $data = $reader->read($id, $fetchRequirements->getFields());
+        }
+
+        return $data;
     }
 }

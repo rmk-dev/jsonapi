@@ -4,8 +4,8 @@ namespace Rmk\JsonApi\Contracts;
 
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
 use Rmk\JsonApi\Document\ValueObject\Resource;
-use Rmk\JsonApi\Dto\FetchRequirements;
-use Rmk\JsonApi\Dto\PaginationRequirements;
+use Rmk\JsonApi\Dto\QueryParameters;
+use Rmk\JsonApi\Dto\PaginationParameters;
 use Rmk\JsonApi\Exception\RelationshipDoesNotExistsException;
 use Rmk\JsonApi\Exception\ResourceNotFoundException;
 
@@ -36,14 +36,14 @@ interface ResourceReader
      * it should contain links about the pagination like "first", "last", "next", "prev".
      * Empty collection must be return if no data is loaded.
      *
-     * @param FetchRequirements $fetchRequirements           Requirements for fetching data (fields, filters, sorting)
-     * @param PaginationRequirements $paginationRequirements Requirements for paginating (items per page, current page)
+     * @param QueryParameters      $fetchRequirements      Parameters for fetching data (fields, filters, sorting)
+     * @param PaginationParameters $paginationRequirements Parameters for paginating (items per page, current page)
      *
      * @return ResourcesCollection Collection with resource objects and pagination links
      */
     public function readCollection(
-        FetchRequirements $fetchRequirements,
-        PaginationRequirements $paginationRequirements
+        QueryParameters        $fetchRequirements,
+        PaginationParameters $paginationRequirements
     ): ResourcesCollection;
 
     /**
@@ -53,10 +53,10 @@ interface ResourceReader
      * found it must throw ResourceNotFoundException. If the resource does not have a relationship with such name it
      * must throw RelationshipDoesNotExistsException.
      *
-     * @param string                 $id                     The main resource identification
-     * @param string                 $name                   The name of the relationship
-     * @param FetchRequirements      $fetchRequirements      Requirements for fetching data (fields, filters, sorting)
-     * @param PaginationRequirements $paginationRequirements Requirements for paginating (items per page, current page)
+     * @param string               $id                     The main resource identification
+     * @param string               $name                   The name of the relationship
+     * @param QueryParameters      $fetchRequirements      Parameters for fetching data (fields, filters, sorting)
+     * @param PaginationParameters $paginationRequirements Parameters for paginating (items per page, current page)
      *
      * @return Relationship
      *
@@ -64,9 +64,9 @@ interface ResourceReader
      * @throws RelationshipDoesNotExistsException
      */
     public function readRelation(
-        string $id,
-        string $name,
-        FetchRequirements $fetchRequirements,
-        PaginationRequirements $paginationRequirements
+        string                 $id,
+        string                 $name,
+        QueryParameters        $fetchRequirements,
+        PaginationParameters $paginationRequirements
     ): Relationship;
 }

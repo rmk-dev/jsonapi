@@ -2,7 +2,7 @@
 
 namespace Rmk\JsonApi\Contracts;
 
-interface Relationship
+interface Relationship extends DocumentData
 {
     /**
      * @return string

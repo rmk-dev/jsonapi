@@ -71,9 +71,4 @@ class ResourceIdentifier implements JsonSerializable, DocumentData
             'type' => $this->getType(),
         ];
     }
-
-    public function count()
-    {
-        return 1;
-    }
 }

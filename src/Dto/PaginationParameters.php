@@ -5,7 +5,7 @@ namespace Rmk\JsonApi\Dto;
 /**
  * Requirements for paginating collections
  */
-class PaginationRequirements
+class PaginationParameters
 {
 
     /**
@@ -36,7 +36,7 @@ class PaginationRequirements
      * @param int $perPage
      * @param int $currentPage
      */
-    public function __construct(int $perPage, int $currentPage)
+    public function __construct(int $perPage = self::DEFAULT_PER_PAGE, int $currentPage = self::DEFAULT_PAGE)
     {
         $this->perPage = $perPage;
         $this->currentPage = $currentPage;
@@ -53,9 +53,9 @@ class PaginationRequirements
     /**
      * @param int $perPage
      *
-     * @return PaginationRequirements
+     * @return PaginationParameters
      */
-    public function setPerPage(int $perPage): PaginationRequirements
+    public function setPerPage(int $perPage): PaginationParameters
     {
         $this->perPage = $perPage;
 
@@ -73,9 +73,9 @@ class PaginationRequirements
     /**
      * @param int $currentPage
      *
-     * @return PaginationRequirements
+     * @return PaginationParameters
      */
-    public function setCurrentPage(int $currentPage): PaginationRequirements
+    public function setCurrentPage(int $currentPage): PaginationParameters
     {
         $this->currentPage = $currentPage;
 
