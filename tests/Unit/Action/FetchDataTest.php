@@ -1,9 +1,8 @@
 <?php
 
-namespace RmkTests\JsonApi\Action;
+namespace RmkTests\JsonApi\Unit\Action;
 
 use PHPUnit\Framework\TestCase;
-use Rmk\Collections\Collection;
 use Rmk\JsonApi\Action\Collection\ReadersCollection;
 use Rmk\JsonApi\Action\FetchData;
 use Rmk\JsonApi\Contracts\Relationship as RelationshipContract;
