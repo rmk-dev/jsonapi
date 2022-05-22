@@ -61,17 +61,20 @@
         },
         {
             "name": "rmk/collections",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rmk-dev/collections.git",
-                "reference": "bd1bbcb0d79b28334b03930c07e2c9bca212b592"
+                "reference": "f07eb3b697f772a814bce28f67a19ac0859664d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rmk-dev/collections/zipball/bd1bbcb0d79b28334b03930c07e2c9bca212b592",
-                "reference": "bd1bbcb0d79b28334b03930c07e2c9bca212b592",
+                "url": "https://api.github.com/repos/rmk-dev/collections/zipball/f07eb3b697f772a814bce28f67a19ac0859664d9",
+                "reference": "f07eb3b697f772a814bce28f67a19ac0859664d9",
                 "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -92,9 +95,9 @@
             "description": "Helper classes for dealing with collections",
             "support": {
                 "issues": "https://github.com/rmk-dev/collections/issues",
-                "source": "https://github.com/rmk-dev/collections/tree/v1.0.1"
+                "source": "https://github.com/rmk-dev/collections/tree/v1.0.2"
             },
-            "time": "2022-05-02T10:55:10+00:00"
+            "time": "2022-05-22T11:38:27+00:00"
         }
     ],
     "packages-dev": [
@@ -2207,5 +2210,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.1.0"
 }

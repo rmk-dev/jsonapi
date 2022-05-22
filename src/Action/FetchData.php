@@ -2,7 +2,7 @@
 
 namespace Rmk\JsonApi\Action;
 
-use Rmk\Collections\Collection;
+use Rmk\JsonApi\Action\Collection\ReadersCollection;
 use Rmk\JsonApi\Contracts\Relationship;
 use Rmk\JsonApi\Contracts\ResourceReader;
 use Rmk\JsonApi\Document\Collection\ResourcesCollection;
@@ -11,6 +11,9 @@ use Rmk\JsonApi\Dto\QueryParameters;
 use Rmk\JsonApi\Dto\PaginationParameters;
 use Rmk\JsonApi\Exception\RelationshipDoesNotExistsException;
 use Rmk\JsonApi\Exception\ResourceNotFoundException;
+use Rmk\JsonApi\Exception\ResourceReadingException;
+use Rmk\JsonApi\Exception\UnsupportedResourceTypeException;
+use Throwable;
 
 /**
  * Fetching data service
@@ -23,14 +26,14 @@ class FetchData
     /**
      * Collection with available readers
      *
-     * @var Collection<string, ResourceReader>
+     * @var ReadersCollection<string, ResourceReader>
      */
-    protected Collection $readers;
+    protected ReadersCollection $readers;
 
     /**
-     * @param Collection $readers
+     * @param ReadersCollection $readers
      */
-    public function __construct(Collection $readers)
+    public function __construct(ReadersCollection $readers)
     {
         $this->readers = $readers;
     }
@@ -44,20 +47,32 @@ class FetchData
      *
      * @throws RelationshipDoesNotExistsException
      * @throws ResourceNotFoundException
+     * @throws ResourceReadingException
      */
     public function execute(QueryParameters $fetchRequirements, PaginationParameters $paginationRequirements)
     {
-        $id = $fetchRequirements->getId();
         $type = $fetchRequirements->getType();
+        if (!$this->readers->has($type)) {
+            throw new UnsupportedResourceTypeException('No reader is found for resource type: ' . $type);
+        }
         /** @var ResourceReader $reader */
         $reader = $this->readers->get($type);
-        if ($id) {
-            $data = $this->fetchSingle($reader, $fetchRequirements, $paginationRequirements);
-        } else {
-            $data = $reader->readCollection($fetchRequirements, $paginationRequirements);
-        }
+        $id = $fetchRequirements->getId();
+        try {
+            if ($id) {
+                $data = $this->fetchSingle($reader, $fetchRequirements, $paginationRequirements);
+            } else {
+                $data = $reader->readCollection($fetchRequirements, $paginationRequirements);
+            }
 
-        return $data;
+            return $data;
+        } catch (Throwable $exception) {
+            if ($exception instanceof RelationshipDoesNotExistsException || $exception instanceof ResourceNotFoundException) {
+                throw $exception;
+            }
+
+            throw new ResourceReadingException('Resource cannot be read', 1, $exception);
+        }
     }
 
     /**
