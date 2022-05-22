@@ -21,8 +21,11 @@
         </report>
     </coverage>
     <testsuites>
-        <testsuite name="JsonApi">
-            <directory>./tests</directory>
+        <testsuite name="UnitTests">
+            <directory>./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="IntegrationTests">
+            <directory>./tests/Integration</directory>
         </testsuite>
     </testsuites>
     <logging>

@@ -1,6 +1,6 @@
 <?php
 
-namespace RmkTests\JsonApi\Action;
+namespace RmkTests\JsonApi\Unit\Action;
 
 use PHPUnit\Framework\TestCase;
 use Rmk\JsonApi\Action\Collection\RemoversCollection;
