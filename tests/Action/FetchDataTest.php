@@ -1,6 +1,6 @@
 <?php
 
-namespace RmkTests\JsonApi;
+namespace RmkTests\JsonApi\Action;
 
 use PHPUnit\Framework\TestCase;
 use Rmk\Collections\Collection;

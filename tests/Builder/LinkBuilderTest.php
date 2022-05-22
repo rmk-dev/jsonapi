@@ -1,6 +1,6 @@
 <?php
 
-namespace RmkTests\JsonApi;
+namespace RmkTests\JsonApi\Builder;
 
 use PHPUnit\Framework\TestCase;
 use Rmk\JsonApi\Document\Builder\LinkBuilder;

@@ -38,8 +38,8 @@ class PaginationParameters
      */
     public function __construct(int $perPage = self::DEFAULT_PER_PAGE, int $currentPage = self::DEFAULT_PAGE)
     {
-        $this->perPage = $perPage;
-        $this->currentPage = $currentPage;
+        $this->setPerPage($perPage);
+        $this->setCurrentPage($currentPage);
     }
 
     /**

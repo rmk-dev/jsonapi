@@ -54,12 +54,12 @@ class QueryParameters
         array $sorting = [],
         iterable $filters = []
     ) {
-        $this->id = $id;
-        $this->type = $type;
-        $this->relationName = $relationName;
-        $this->fields = $fields;
-        $this->sorting = $sorting;
-        $this->filters = $filters;
+        $this->setId($id);
+        $this->setType($type);
+        $this->setRelationName($relationName);
+        $this->setFields($fields);
+        $this->setSorting($sorting);
+        $this->setFilters($filters);
     }
 
     /**
