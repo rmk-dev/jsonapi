@@ -24,6 +24,9 @@
         <testsuite name="UnitTests">
             <directory>./tests/Unit</directory>
         </testsuite>
+        <testsuite name="IntegrationTests">
+            <directory>./tests/Integration</directory>
+        </testsuite>
     </testsuites>
     <logging>
         <testdoxText outputFile="php://stdout"/>
