@@ -60,7 +60,7 @@ interface ResourceReader
      *
      * @return Relationship
      *
-     * @throws ResourceNotFoundException;
+     * @throws ResourceNotFoundException
      * @throws RelationshipDoesNotExistsException
      */
     public function readRelation(
