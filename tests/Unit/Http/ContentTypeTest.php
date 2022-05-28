@@ -16,8 +16,8 @@ class ContentTypeTest extends TestCase
         $request->expects($this->once())
             ->method('getHeaderLine')
             ->willReturn(ContentType::JSON_API_TYPE);
-        $contentType = new ContentType();
-        $contentType->assertRequestSendsJsonApi($request);
+
+        ContentType::assertRequestSendsJsonApi($request);
     }
 
     public function testRequestFailsToSendJsonApi(): void
@@ -26,11 +26,11 @@ class ContentTypeTest extends TestCase
         $request->expects($this->once())
             ->method('getHeaderLine')
             ->willReturn(ContentType::JSON_API_TYPE.'; charset=utf-8');
-        $contentType = new ContentType();
+
         $this->expectException(ContentTypeException::class);
         $this->expectExceptionMessage('Invalid "Content-Type" header');
         $this->expectExceptionCode(ContentTypeException::INVALID_CONTENT_TYPE_HEADER);
-        $contentType->assertRequestSendsJsonApi($request);
+        ContentType::assertRequestSendsJsonApi($request);
     }
 
     public function testRequestAcceptsJsonApi(): void
@@ -39,8 +39,8 @@ class ContentTypeTest extends TestCase
         $request->expects($this->once())
             ->method('getHeaderLine')
             ->willReturn(ContentType::JSON_API_TYPE . ', text/xml; charset=utf-8');
-        $contentType = new ContentType();
-        $contentType->assertRequestAcceptsJsonApi($request);
+
+        ContentType::assertRequestAcceptsJsonApi($request);
     }
 
 
@@ -50,10 +50,10 @@ class ContentTypeTest extends TestCase
         $request->expects($this->once())
             ->method('getHeaderLine')
             ->willReturn(ContentType::JSON_API_TYPE.'; charset=utf-8');
-        $contentType = new ContentType();
+
         $this->expectException(ContentTypeException::class);
         $this->expectExceptionMessage('The "Accept" header must not contains media type parameters');
         $this->expectExceptionCode(ContentTypeException::INVALID_ACCEPT_HEADER);
-        $contentType->assertRequestAcceptsJsonApi($request);
+        ContentType::assertRequestAcceptsJsonApi($request);
     }
 }

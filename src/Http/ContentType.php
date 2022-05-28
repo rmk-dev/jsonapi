@@ -17,7 +17,7 @@ class ContentType
      *
      * @throws ContentTypeException
      */
-    public function assertRequestSendsJsonApi(RequestInterface $request): void
+    public static function assertRequestSendsJsonApi(RequestInterface $request): void
     {
         $header = $request->getHeaderLine('Content-Type');
         if ($header !== self::JSON_API_TYPE) {
@@ -35,7 +35,7 @@ class ContentType
      *
      * @throws ContentTypeException
      */
-    public function assertRequestAcceptsJsonApi(RequestInterface $request): void
+    public static function assertRequestAcceptsJsonApi(RequestInterface $request): void
     {
         $header = $request->getHeaderLine('Accept');
         $regex = sprintf('/%s(,.+)?$/', str_replace('/', '\\/', preg_quote(self::JSON_API_TYPE)));;
