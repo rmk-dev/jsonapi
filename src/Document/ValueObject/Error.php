@@ -3,6 +3,7 @@
 namespace Rmk\JsonApi\Document\ValueObject;
 
 use JsonSerializable;
+use Rmk\JsonApi\Document\Collection\LinksCollection;
 use stdClass;
 
 /**
@@ -52,9 +53,9 @@ class Error implements JsonSerializable
      * A links object containing "about" member -
      * a link that leads to further details about this particular occurrence of the problem.
      *
-     * @var Link|null
+     * @var LinksCollection|null
      */
-    private ?Link $link;
+    private ?LinksCollection $link;
 
     /**
      * An object containing references to the source of the error
@@ -76,7 +77,7 @@ class Error implements JsonSerializable
      * @param string $code
      * @param string $title
      * @param string $detail
-     * @param Link|null $link
+     * @param LinksCollection|null $link
      * @param ErrorSource|null $source
      * @param stdClass|null $meta
      */
@@ -86,7 +87,7 @@ class Error implements JsonSerializable
         string $code = '',
         string $title = '',
         string $detail = '',
-        ?Link $link = null,
+        ?LinksCollection $link = null,
         ?ErrorSource $source = null,
         ?stdClass $meta = null
     ) {
@@ -141,9 +142,9 @@ class Error implements JsonSerializable
     }
 
     /**
-     * @return Link|null
+     * @return LinksCollection|null
      */
-    public function getLink(): ?Link
+    public function getLink(): ?LinksCollection
     {
         return $this->link;
     }

@@ -2,11 +2,15 @@
 
 namespace Rmk\JsonApi\Document\Builder;
 
+use Rmk\JsonApi\Contracts\HttpStatusAwareException;
+use Rmk\JsonApi\Contracts\LinkableException;
 use Rmk\JsonApi\Contracts\ValueObjectBuilder;
+use Rmk\JsonApi\Document\Collection\LinksCollection;
 use Rmk\JsonApi\Document\ValueObject\Error;
 use Rmk\JsonApi\Document\ValueObject\ErrorSource;
 use Rmk\JsonApi\Document\ValueObject\Link;
 use stdClass;
+use Throwable;
 
 /**
  * Builds error objects
@@ -57,7 +61,7 @@ class ErrorBuilder implements ValueObjectBuilder
      *
      * @var Link|null
      */
-    protected ?Link $link = null;
+    protected ?LinksCollection $link = null;
 
     /**
      * An object containing references to the source of the error
@@ -124,10 +128,11 @@ class ErrorBuilder implements ValueObjectBuilder
     }
 
     /**
-     * @param Link $link
+     * @param LinksCollection $link
+     *
      * @return ErrorBuilder
      */
-    public function withLink(Link $link): ErrorBuilder
+    public function withLink(LinksCollection $link): ErrorBuilder
     {
         $this->link = $link;
         return $this;
@@ -167,7 +172,16 @@ class ErrorBuilder implements ValueObjectBuilder
             ->withTitle($object->title ?? $builder->title)
             ->withDetail($object->detail ?? $builder->detail);
         if (isset($object->link)) {
-            $builder->withLink(LinkBuilder::fromPlainObject($object->link)->build());
+            if (!empty($object->link->{Link::TYPE_ABOUT})) {
+                $links = new LinksCollection([
+                    Link::TYPE_ABOUT => LinkBuilder::fromPlainObject($object->link->{Link::TYPE_ABOUT})->build()
+                ]);
+            } else {
+                $links = new LinksCollection([
+                    Link::TYPE_ABOUT => LinkBuilder::fromPlainObject($object->link)->build()
+                ]);
+            }
+            $builder->withLink($links);
         }
         if (isset($object->source)) {
             $builder->withSource(new ErrorSource(
@@ -177,6 +191,24 @@ class ErrorBuilder implements ValueObjectBuilder
         }
         if (isset($object->meta)) {
             $builder->withMeta($object->meta);
+        }
+
+        return $builder;
+    }
+
+    public static function fromThrowable(Throwable $throwable): self
+    {
+        $builder = static::instance();
+        $builder->withTitle($throwable->getMessage())
+            ->withCode($throwable->getCode());
+
+        if ($throwable instanceof HttpStatusAwareException) {
+            $builder->withStatus($throwable->getHttpStatus());
+        }
+        if ($throwable instanceof LinkableException) {
+            $links = new LinksCollection();
+            $links->set(Link::TYPE_ABOUT, LinkBuilder::instance()->withHref($throwable->getLink())->build());
+            $builder->withLink($links);
         }
 
         return $builder;

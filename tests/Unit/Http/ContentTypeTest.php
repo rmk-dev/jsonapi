@@ -17,7 +17,7 @@ class ContentTypeTest extends TestCase
             ->method('getHeaderLine')
             ->willReturn(ContentType::JSON_API_TYPE);
 
-        ContentType::assertRequestSendsJsonApi($request);
+        ContentType::assertContentTypeIsJsonApi($request);
     }
 
     public function testRequestFailsToSendJsonApi(): void
@@ -30,7 +30,7 @@ class ContentTypeTest extends TestCase
         $this->expectException(ContentTypeException::class);
         $this->expectExceptionMessage('Invalid "Content-Type" header');
         $this->expectExceptionCode(ContentTypeException::INVALID_CONTENT_TYPE_HEADER);
-        ContentType::assertRequestSendsJsonApi($request);
+        ContentType::assertContentTypeIsJsonApi($request);
     }
 
     public function testRequestAcceptsJsonApi(): void

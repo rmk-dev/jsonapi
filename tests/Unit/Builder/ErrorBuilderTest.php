@@ -4,6 +4,7 @@ namespace RmkTests\JsonApi\Unit\Builder;
 
 use PHPUnit\Framework\TestCase;
 use Rmk\JsonApi\Document\Builder\ErrorBuilder;
+use Rmk\JsonApi\Document\ValueObject\Link;
 
 class ErrorBuilderTest extends TestCase
 {
@@ -29,7 +30,7 @@ class ErrorBuilderTest extends TestCase
         $this->assertEquals($plain->title, $error->getTitle());
         $this->assertEquals($plain->code, $error->getCode());
         $this->assertEquals($plain->detail, $error->getDetail());
-        $this->assertEquals($plain->link, $error->getLink()->getHref());
+        $this->assertEquals($plain->link, $error->getLink()[Link::TYPE_ABOUT]->getHref());
         $this->assertEquals($plain->source->pointer, $error->getSource()->getPointer());
         $this->assertEquals($plain->source->parameter, $error->getSource()->getParameter());
     }

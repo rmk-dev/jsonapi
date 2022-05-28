@@ -17,7 +17,7 @@ class ContentType
      *
      * @throws ContentTypeException
      */
-    public static function assertRequestSendsJsonApi(RequestInterface $request): void
+    public static function assertContentTypeIsJsonApi(RequestInterface $request): void
     {
         $header = $request->getHeaderLine('Content-Type');
         if ($header !== self::JSON_API_TYPE) {
